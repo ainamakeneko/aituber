@@ -1,55 +1,96 @@
-# OBS Setting
-シーン/ソース/mouth_openでnamakeneko_open.pngを設定
-シーン/ソース/mouth_closedでnamakeneko_closed.pngを設定
+# なまけ猫AI 配信ツール
 
-# VoiceBox Setting
-https://github.com/VOICEVOX/voicevox_engine/releases
-VOICEVOX ENGINE 0.24.1のWindows（CPU版）をダウンロードして解凍し、
-voicevox_engine-windows-cpu-0.24.1/run.exeを起動する
+OBSとVOICEVOXを使って「なまけ猫AI」が口パク・音声付きで配信に参加できます。  
+Gemini APIを設定すれば、自動応答やノベルゲーム実況など高度なモードも利用可能です。  
 
-# GeminiAPIKeyを取得するため、下記にアクセスしてGetAPIKeyする（回答自動生成しないなら不要）
-https://aistudio.google.com/prompts/new_chat
+---
 
-# Windows PowerShell で環境設定（回答自動生成しないなら不要）
-$env:GEMINI_API_KEY=""
+## 1. 準備
 
-# start
+### OBS 設定
+1. シーンに以下を追加してください:
+   - **mouth_open** → `namakeneko_open.png`
+   - **mouth_closed** → `namakeneko_closed.png`
+
+### VOICEVOX 設定
+1. [VOICEVOX ENGINE 0.24.1 (Windows CPU版)](https://github.com/VOICEVOX/voicevox_engine/releases) をダウンロード  
+2. 解凍後、以下を実行  
+   ```powershell
+   voicevox_engine-windows-cpu-0.24.1/run.exe
+   ```
+
+### Gemini APIキー（自動応答を使う場合のみ必要）
+1. [Google AI Studio](https://aistudio.google.com/prompts/new_chat) からAPIキーを取得  
+2. Windows PowerShellで環境変数を設定  
+   ```powershell
+   $env:GEMINI_API_KEY="取得したAPIキー"
+   ```
+
+---
+
+## 2. 起動方法
+```powershell
 python.exe .\namakeneko_ai.py
+```
 
-# GeminiAPIKeyを設定していない場合はこれが表示されるため、1を入れる（なんでもいい）
-Gemini APIキーを入力してください: 1
+- APIキーを設定していない場合は、以下が表示されます  
+  ```
+  Gemini APIキーを入力してください: 1
+  ```
+  → 適当に `1` と入力すればOK
 
-# yにするとOBSのmouth_open、mouth_closeを表示、非表示で口パク切り替える
-口パクアニメーション機能を使用しますか？ (y/n): y
+---
 
-# 1を入力
-=== モード選択 ===
-1. 配信モード - チャット応答・定期つぶやき機能    
-2. 対話モード - 1対1での会話
-3. テキスト読み上げモード - テキストファイルを読み上げ
-4. ノベルゲーム実況モード - ブラウザゲームを自動実況
-5. Webページ読み上げモード - URLを読んでコメント  
-6. OBS画面解析モード - ブラウザソースを見てコメン ト
-7. テストモード - 基本機能のテスト
-モードを選択してください (1/2/3/4/5/6/7):1
+## 3. 初期設定
 
-# nを選択（怠け猫AIの回答を表示するウィンドウなくてもいい）
-=== 配信モード開始 ===
-テキスト表示ウィンドウを開きますか？ (y/n): n     
+1. **口パクアニメーションを使うか**  
+   ```
+   口パクアニメーション機能を使用しますか？ (y/n): y
+   ```
 
-# nを選択（Youtubeのチャット取得して回答する場合はy。API連携とか面倒なので飛ばします）
-YouTube Live連携を使用しますか？ (y/n): n
+2. **モード選択**  
+   ```
+   === モード選択 ===
+   1. 配信モード - チャット応答・定期つぶやき機能    
+   2. 対話モード - 1対1での会話
+   3. テキスト読み上げモード - テキストファイルを読み上げ
+   4. ノベルゲーム実況モード - ブラウザゲームを自動実況
+   5. Webページ読み上げモード - URLを読んでコメント  
+   6. OBS画面解析モード - ブラウザソースを見てコメント
+   7. テストモード - 基本機能のテスト
+   モードを選択してください (1/2/3/4/5/6/7): 1
+   ```
 
-# speak:テストと入れるとVoiceBoxで音声生成して、口パクで話します。
-コマンド:
-  'chat:ユーザー名:メッセージ' - チャットメッセー ジをシミュレート
-  'comment' - 手動でランダムつぶやき
-  'speak:テキスト' - 指定したテキストを手動で発話 
-  'talk' - 自由に話させる（対話形式）
-  'toggle' - 自動応答のON/OFF切り替え
-  'quit' - 配信モード終了
-  'help' - ヘルプ表示
+3. **テキスト表示ウィンドウ**  
+   ```
+   テキスト表示ウィンドウを開きますか？ (y/n): n
+   ```
 
-コマンド入力 (または Enter で待機): speak:テスト
+4. **YouTube Live連携**  
+   ```
+   YouTube Live連携を使用しますか？ (y/n): n
+   ```
 
-# 動かない場合、機能を変えたい場合は、Kiroでこのプロジェクトを開いて、チャットで聞くと教えてくれるはず・・・
+---
+
+## 4. コマンド一覧（配信モード時）
+
+| コマンド | 動作 |
+|----------|------|
+| `chat:ユーザー名:メッセージ` | チャットをシミュレート |
+| `comment` | ランダムにつぶやく |
+| `speak:テキスト` | 指定テキストを音声で発話 |
+| `talk` | 自由に話す（対話形式） |
+| `toggle` | 自動応答 ON/OFF 切り替え |
+| `quit` | 配信モード終了 |
+| `help` | ヘルプを表示 |
+
+例:  
+```powershell
+コマンド入力: speak:テスト
+```
+
+---
+
+## 5. トラブルシューティング
+- 動かない場合や機能を追加したい場合は、**Kiroでこのプロジェクトを開き、チャットで相談**してください。  
